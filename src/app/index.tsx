@@ -5,9 +5,13 @@ import { CATEGORIES, MENU } from "@/utils/data/products"
 import { useRef, useState } from 'react';
 import { Product } from '@/components/product';
 import { Link } from 'expo-router';
+import { useCartStore } from '@/stores/cart-store';
 
-export default function App() {
+export default function Home() {
+  const cartStore = useCartStore();
   const [category, setCategory] = useState(CATEGORIES[0]);
+
+  const productsQuantity = cartStore.products.reduce((acc, product) => acc + product.quantity, 0);
 
   // TODO: Add select category on scroll
   const sectionListRef = useRef<SectionList>(null);
@@ -35,7 +39,7 @@ export default function App() {
 
   return (
     <View className="flex-1 pt-8">
-      <Header title="Faça seu pedido" cartItemsQuantity={5} />
+      <Header title="Faça seu pedido" cartItemsQuantity={productsQuantity} />
       <FlatList
         ref={flatListRef}
         data={CATEGORIES}
